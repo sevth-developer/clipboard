@@ -39,14 +39,12 @@ func writeAll(text string) error {
 		return err
 	}
 
-	if err := copyCmd.Start(); err != nil {
-		return err
-	}
 	if _, err := in.Write([]byte(text)); err != nil {
 		return err
 	}
-	if err := in.Close(); err != nil {
+	defer in.Close()
+	if err := copyCmd.Start(); err != nil {
 		return err
 	}
-	return copyCmd.Wait()
+	return nil
 }
